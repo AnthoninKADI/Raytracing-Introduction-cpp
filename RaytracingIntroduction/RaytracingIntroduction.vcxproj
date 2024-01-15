@@ -127,7 +127,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Hittable.cpp" />
+    <ClCompile Include="HittableCollection.cpp" />
+    <ClCompile Include="Interval.cpp" />
+    <ClCompile Include="Ray.cpp" />
     <ClCompile Include="RaytracingIntroduction.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="Hittable.h" />
+    <ClInclude Include="HittableCollection.h" />
+    <ClInclude Include="Interval.h" />
+    <ClInclude Include="Ray.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Utility.h" />
+    <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
