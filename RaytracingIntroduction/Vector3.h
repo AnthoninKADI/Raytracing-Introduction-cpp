@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include <iostream>
+#include "Utility.h"
 
 class Vector3
 {
@@ -41,6 +42,23 @@ public:
     {
         return x * x + y * y + z * z;
     }
+
+    static Vector3 Random()
+    {
+        return Vector3(RandomDouble(), RandomDouble(), RandomDouble());
+    }
+
+    static Vector3 Random(double min, double max)
+    {
+        return Vector3(RandomDouble(min, max), RandomDouble(min, max), RandomDouble(min, max));
+    }
+
+    bool NearZero() const
+    {
+        double s = 1e-18;
+        return fabs(x < s) && fabs(y < s) && fabs(z < s);
+    }
+
 };
 
 //Alias for Vector3 to increase code readability
@@ -99,6 +117,38 @@ inline Vector3 Unit(Vector3 vector)
 {
     return vector / vector.Length();
 }
+
+inline Position RandomInUnitSphere()
+{
+    while (true)
+    {
+        Position position = Vector3::Random(-1, 1);
+        if (position.SquaredLength() < 1) return position;
+    }
+}
+
+inline Vector3 RandomUnitVector()
+{
+    return Unit(RandomInUnitSphere());
+}
+
+inline Vector3 RandomOnHemisphere(const Vector3& normal)
+{
+    Vector3 onUnitSphere = RandomUnitVector();
+    //If in the same hemisphere as the normal
+    if (Dot(onUnitSphere, normal) > 0.0)
+    {
+        return onUnitSphere;
+    }
+    return -onUnitSphere;
+}
+
+inline Vector3 Reflect(const Vector3& direction, const Vector3& normal)
+{
+    return direction - 2 * Dot(direction, normal) * normal;
+}
+
+
 
 
 

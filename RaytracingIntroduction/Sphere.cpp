@@ -1,7 +1,6 @@
 #include "Sphere.h"
 
 bool Sphere::Hit(const Ray& rRay, Interval rayTime, HitInfo& hitInfo) const
-{
 
 {
     Vector3 oC = rRay.GetOrigin() - mCenter;
@@ -25,6 +24,7 @@ bool Sphere::Hit(const Ray& rRay, Interval rayTime, HitInfo& hitInfo) const
     hitInfo.coordinates = rRay.At(hitInfo.time);
     Vector3 outwardNormal = (hitInfo.coordinates - mCenter) / mRadius;
     hitInfo.SetFaceNormal(rRay, outwardNormal);
+    hitInfo.material = material;
 
     return true;
 }

@@ -1,7 +1,11 @@
-﻿  Hittable.cpp
+﻿  Camera.cpp
+  Hittable.cpp
   HittableCollection.cpp
+  LambertianMaterial.cpp
+  Material.cpp
+  MetalMaterial.cpp
+  Ray.cpp
   RaytracingIntroduction.cpp
   Sphere.cpp
-  Utility.cpp
   Generating Code...
   RaytracingIntroduction.vcxproj -> C:\Users\anthonin.kadi\Desktop\Raytracing Intro\RaytracingIntroduction\x64\Debug\RaytracingIntroduction.exe
