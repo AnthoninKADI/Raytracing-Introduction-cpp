@@ -29,20 +29,26 @@ void Camera::Initialize()
     height = static_cast<int>(width / aspectRatio);
     if (height < 1) height = 1;
 
-    center = Position(0, 0, 0);
-    double focalLength = 1;
-    double viewportHeight = 2;
+    center = position;
+    double focalLength = (position - target).Length();
+    double theta = DegToRad(verticalFoV);
+    double h = tan(theta / 2);
+    double viewportHeight = 2 * h * focalLength;
     double viewportWidth = viewportHeight * (static_cast<double>(width) / height);
 
-    Vector3 viewportX = Vector3(viewportWidth, 0, 0);
-    Vector3 viewportY = Vector3(0, -viewportHeight, 0); //We invert Y
+    forward = Unit(position - target);
+    right = Unit(Cross(viewUp, forward));
+    up = Cross(forward, right);
+
+    Vector3 viewportX = viewportWidth * right;
+    Vector3 viewportY = viewportHeight * -up; //We invert Y
 
     //Delta vector between pixels
     pixelDeltaX = viewportX / width;
     pixelDeltaY = viewportY / height;
 
     //Position of the top left pixel
-    Vector3 viewportOrigin = center - Vector3(0, 0, focalLength)
+    Vector3 viewportOrigin = center - (focalLength * forward)
         - viewportX / 2 - viewportY / 2;
 
     originPixelLocation = viewportOrigin + 0.5 * (pixelDeltaX + pixelDeltaY);
@@ -87,6 +93,13 @@ Vector3 Camera::PixelSampleSquared() const
     double pX = -0.5 + RandomDouble();
     double pY = -0.5 + RandomDouble();
     return (pX * pixelDeltaX) + (pY * pixelDeltaY);
+}
+
+void Camera::SetTransform(Position origin, Position lookAt, Vector3 upDirection)
+{
+    position = origin;
+    target = lookAt;
+    viewUp = upDirection;
 }
 
 
