@@ -30,10 +30,9 @@ void Camera::Initialize()
     if (height < 1) height = 1;
 
     center = position;
-    double focalLength = (position - target).Length();
     double theta = DegToRad(verticalFoV);
     double h = tan(theta / 2);
-    double viewportHeight = 2 * h * focalLength;
+    double viewportHeight = 2 * h * focusDistance;
     double viewportWidth = viewportHeight * (static_cast<double>(width) / height);
 
     forward = Unit(position - target);
@@ -48,11 +47,15 @@ void Camera::Initialize()
     pixelDeltaY = viewportY / height;
 
     //Position of the top left pixel
-    Vector3 viewportOrigin = center - (focalLength * forward)
+    Vector3 viewportOrigin = center - (focusDistance * forward)
         - viewportX / 2 - viewportY / 2;
 
     originPixelLocation = viewportOrigin + 0.5 * (pixelDeltaX + pixelDeltaY);
 
+    //Calculate the camera defocus disk basis vectors
+    double defocusRadius = focusDistance * tan(DegToRad(defocusAngle / 2));
+    defocusDiskX = right * defocusRadius;
+    defocusDiskY = up * defocusRadius;
 }
 
 Color Camera::RayColor(const Ray& rRay, int bouncesLeft, const Hittable& rWorld) const
@@ -81,7 +84,7 @@ Ray Camera::GetRay(int x, int y) const
     Vector3 pixelCenter = originPixelLocation + (x * pixelDeltaX) + (y * pixelDeltaY);
     Vector3 pixelSample = pixelCenter + PixelSampleSquared();
 
-    Position rayOrigin = center;
+    Position rayOrigin = defocusAngle <= 0 ? center : DefocusDiskSample();
     Vector3 rayDirection = pixelSample - rayOrigin;
 
     return Ray(rayOrigin, rayDirection);
@@ -101,5 +104,19 @@ void Camera::SetTransform(Position origin, Position lookAt, Vector3 upDirection)
     target = lookAt;
     viewUp = upDirection;
 }
+
+void Camera::SetFocus(double angle, double distance)
+{
+    defocusAngle = angle;
+    focusDistance = distance;
+}
+
+Position Camera::DefocusDiskSample() const
+{
+    Position position = RandomInUnitDisk();
+    return center + (position.x * defocusDiskX) + (position.y * defocusDiskY);
+}
+
+
 
 

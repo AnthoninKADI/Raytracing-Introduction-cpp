@@ -143,6 +143,16 @@ inline Vector3 RandomOnHemisphere(const Vector3& normal)
     return -onUnitSphere;
 }
 
+inline Vector3 RandomInUnitDisk()
+{
+    while (true)
+    {
+        Vector3 position = Vector3(RandomDouble(-1, 1), RandomDouble(-1, 1), 0);
+        if (position.SquaredLength() < 1)
+            return position;
+    }
+}
+
 inline Vector3 Reflect(const Vector3& direction, const Vector3& normal)
 {
     return direction - 2 * Dot(direction, normal) * normal;
