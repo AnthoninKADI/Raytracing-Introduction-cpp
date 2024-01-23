@@ -51,8 +51,16 @@ int main(int argc, char* argv[])
         }
     }
 
+    shared_ptr<Material> material1 = make_shared<DialectricMaterial>(1.5);
+    world.Add(make_shared<Sphere>(Position(0, 1, 0), 1.0, material1));
 
-    Camera camera(1200, 16.0 / 9.0, 500, 50, 20);
+    shared_ptr<Material> material2 = make_shared<LambertianMaterial>(Color(0.4, 0.2, 0.1));
+    world.Add(make_shared<Sphere>(Position(-4, 1, 0), 1.0, material2));
+
+    shared_ptr<Material> material3 = make_shared<MetalMaterial>(Color(0.7, 0.6, 0.5), 0.0);
+    world.Add(make_shared<Sphere>(Position(4, 1, 0), 1.0, material3));
+
+    Camera camera(1200, 16.0 / 9.0, 50, 50, 20);
     camera.SetTransform(Position(13, 2, 3), Position(0, 0, 0), Vector3(0, 1, 0));
     camera.SetFocus(0.6, 10.0);
     camera.Render(world);
